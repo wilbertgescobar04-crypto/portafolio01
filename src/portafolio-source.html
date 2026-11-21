@@ -1,0 +1,3070 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wilbert Gordillo Escobar | Diseñador Web & Desarrollador React</title>
+  <!-- Fuente moderna Inter desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       10. SECCIÓN DE CERTIFICACIONES (CARRUSEL CSS PURO & VISOR MODAL :target)
+       ========================================================================== */
+    .cert-carousel-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .cert-carousel-track {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 0.75rem 0.25rem 1.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-primary) rgba(15, 23, 42, 0.7);
+    }
+
+    .cert-carousel-track::-webkit-scrollbar {
+      height: 7px;
+    }
+
+    .cert-carousel-track::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: var(--radius-full);
+    }
+
+    .cert-carousel-track::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: var(--radius-full);
+    }
+
+    .cert-slide-card {
+      flex: 0 0 88%;
+      scroll-snap-align: start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.65rem;
+      backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cert-slide-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-react), var(--accent-primary), var(--accent-secondary));
+      opacity: 0.75;
+    }
+
+    .cert-slide-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent-react);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    .cert-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .cert-card-preview {
+      display: block;
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+    }
+
+    .cert-seal-mini {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(129, 140, 248, 0.16));
+      border: 1px solid rgba(97, 218, 251, 0.35);
+      display: grid;
+      place-items: center;
+      color: var(--accent-react);
+      flex-shrink: 0;
+    }
+
+    .cert-date-pill {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius-full);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-primary);
+      white-space: nowrap;
+    }
+
+    .cert-issuer {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .cert-card-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text-primary);
+      margin-bottom: 0.55rem;
+    }
+
+    .cert-card-meta {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .cert-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+    }
+
+    .cert-id-tag {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .cert-open-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+      color: var(--accent-react);
+    }
+
+    /* Controles e indicadores del carrusel */
+    .cert-carousel-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .cert-dots-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .cert-dot-btn {
+      padding: 0.38rem 0.85rem;
+      border-radius: var(--radius-full);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .cert-dot-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-react);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    /* ==========================================================================
+       VISOR MODAL DE CERTIFICADOS EN CSS PURO (:target)
+       ========================================================================== */
+    .cert-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(5, 8, 15, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .cert-modal-overlay:target {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .cert-modal-backdrop-close {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      cursor: default;
+    }
+
+    .cert-modal-dialog {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 820px;
+      margin: auto;
+      background: #0b1120;
+      border: 1px solid rgba(97, 218, 251, 0.45);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(56, 189, 248, 0.22);
+      overflow: hidden;
+      transform: translateY(18px) scale(0.97);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .cert-modal-overlay:target .cert-modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .cert-modal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 1.35rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .cert-modal-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-react);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cert-modal-close-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-sm);
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.38);
+      color: #fca5a5;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .cert-modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.28);
+      color: #ffffff;
+    }
+
+    /* Diploma / Documento Oficial Reproducido */
+    .diploma-sheet {
+      margin: 1.35rem;
+      padding: 2rem 1.75rem;
+      background: linear-gradient(145deg, #f8fafc 0%, #eef2f6 100%);
+      color: #0f172a;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      box-shadow: inset 0 0 0 6px #ffffff, inset 0 0 0 8px rgba(14, 116, 144, 0.25);
+      position: relative;
+      text-align: center;
+    }
+
+    .diploma-sheet.theme-react {
+      box-shadow: inset 0 0 0 6px #ffffff, inset 0 0 0 8px rgba(29, 78, 216, 0.3);
+    }
+
+    .diploma-sheet.theme-node {
+      box-shadow: inset 0 0 0 6px #ffffff, inset 0 0 0 8px rgba(180, 130, 90, 0.35);
+    }
+
+    .diploma-sheet.theme-foundations {
+      box-shadow: inset 0 0 0 6px #ffffff, inset 0 0 0 8px rgba(51, 65, 85, 0.3);
+    }
+
+    .diploma-sheet.theme-utea {
+      box-shadow: inset 0 0 0 6px #ffffff, inset 0 0 0 8px rgba(3, 105, 161, 0.35);
+    }
+
+    .diploma-sheet:has(> .cert-preview-image) {
+      padding: 0;
+      overflow: hidden;
+      background: #0b1120;
+    }
+
+    .diploma-sheet > .cert-preview-image {
+      display: block;
+      width: 100%;
+      max-height: 68vh;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+    .diploma-sheet:has(> .cert-preview-image) > :not(.cert-preview-image) {
+      display: none;
+    }
+
+    .diploma-header-emblem {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+
+    .diploma-rosette {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
+    }
+
+    .diploma-rosette.rosette-blue { background: linear-gradient(135deg, #1e3a8a, #0284c7); }
+    .diploma-rosette.rosette-sand { background: linear-gradient(135deg, #b08968, #7f5539); }
+    .diploma-rosette.rosette-slate { background: linear-gradient(135deg, #1e293b, #475569); }
+    .diploma-rosette.rosette-utea { background: linear-gradient(135deg, #0369a1, #ca8a04); }
+
+    .diploma-institution {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #1e293b;
+    }
+
+    .diploma-sub-institution {
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #475569;
+    }
+
+    .diploma-endorses {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: #64748b;
+      margin: 0.85rem 0 0.25rem;
+    }
+
+    .diploma-recipient {
+      font-size: clamp(1.35rem, 3.2vw, 1.95rem);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      padding-bottom: 0.55rem;
+      margin: 0 auto 0.85rem;
+      max-width: 85%;
+      border-bottom: 2px solid #cbd5e1;
+    }
+
+    .diploma-course-intro {
+      font-size: 0.88rem;
+      color: #334155;
+      margin-bottom: 0.35rem;
+    }
+
+    .diploma-course-title {
+      font-size: clamp(1.08rem, 2.4vw, 1.4rem);
+      font-weight: 800;
+      color: #0369a1;
+      margin-bottom: 1.1rem;
+      line-height: 1.35;
+    }
+
+    .diploma-details-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 2rem;
+      padding: 0.65rem 1rem;
+      background: rgba(15, 23, 42, 0.05);
+      border-radius: 8px;
+      margin-bottom: 1.35rem;
+      font-size: 0.8rem;
+      color: #334155;
+    }
+
+    .diploma-details-bar strong {
+      color: #0f172a;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .diploma-signatures {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+      padding-top: 0.65rem;
+    }
+
+    .signature-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .signature-script {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: #1e3a8a;
+      margin-bottom: 0.25rem;
+    }
+
+    .signature-line {
+      width: 78%;
+      height: 1px;
+      background: #94a3b8;
+      margin-bottom: 0.35rem;
+    }
+
+    .signature-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .signature-role {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #64748b;
+    }
+
+    /* Barra inferior de acciones dentro del visor modal */
+    .cert-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem;
+      padding: 0 1.35rem 1.35rem;
+    }
+
+    .modal-nav-group {
+      display: flex;
+      gap: 0.65rem;
+    }
+
+    .btn-modal-nav {
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-sm);
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-modal-nav:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-react);
+    }
+
+    /* ==========================================================================
+       11. FOOTER
+       ========================================================================== */
+    :root {
+      /* Paleta de colores Dark Mode */
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.45);
+      --bg-card-hover: rgba(30, 41, 59, 0.75);
+      --bg-glass: rgba(9, 13, 22, 0.78);
+
+      /* Acentos React / Azul Cian Eléctrico */
+      --accent-primary: #38bdf8;
+      --accent-react: #61dafb;
+      --accent-secondary: #818cf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+
+      /* Tipografía y Textos */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Bordes y Sombras */
+      --border-subtle: rgba(148, 163, 184, 0.12);
+      --border-accent: rgba(56, 189, 248, 0.4);
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 35px -10px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 30px rgba(56, 189, 248, 0.18);
+
+      /* Espaciado, Radios y Transiciones */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-full: 9999px;
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --container-max: 1180px;
+      --nav-height: 76px;
+    }
+
+    /* ==========================================================================
+       2. RESET & ESTILOS BASE (MOBILE-FIRST)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--nav-height);
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.65;
+      overflow-x: hidden;
+      /* Fondo sutil con malla radial */
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 35%, rgba(129, 140, 248, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(97, 218, 251, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    /* ==========================================================================
+       3. UTILIDADES Y LAYOUT
+       ========================================================================== */
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: var(--radius-full);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent-primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.85rem, 4vw, 2.65rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent-react) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Botones Reutilizables */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.65rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), #0284c7);
+      color: #090d16;
+      box-shadow: 0 8px 20px -4px rgba(56, 189, 248, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px -4px rgba(56, 189, 248, 0.65);
+      filter: brightness(1.08);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.6);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       4. NAVBAR FIJO CON GLASSMORPHISM & MENÚ RESPONSIVO SOLO CSS
+       ========================================================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--nav-height);
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(97, 218, 251, 0.2), rgba(129, 140, 248, 0.2));
+      border: 1px solid var(--border-accent);
+      display: grid;
+      place-items: center;
+      color: var(--accent-react);
+    }
+
+    .brand-icon svg {
+      animation: spinSlow 18s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Checkbox oculto para menú móvil en CSS puro */
+    .nav-toggle {
+      display: none;
+    }
+
+    .nav-hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: rgba(30, 41, 59, 0.4);
+      cursor: pointer;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: var(--text-primary);
+      border-radius: 2px;
+      transition: transform var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      width: 100%;
+      background: rgba(9, 13, 22, 0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      transform: translateY(-120%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-smooth);
+    }
+
+    .nav-toggle:checked ~ .nav-menu {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-toggle:checked + .nav-hamburger span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .nav-toggle:checked + .nav-hamburger span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle:checked + .nav-hamburger span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .nav-link {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+      padding: 0.35rem 0;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .nav-cta {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.875rem;
+    }
+
+    /* ==========================================================================
+       5. HERO SECTION & TARJETA VISUAL JSX/REACT
+       ========================================================================== */
+    .hero {
+      padding-top: calc(var(--nav-height) + 3.5rem);
+      padding-bottom: 5rem;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .hero-availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 1rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-full);
+      color: #34d399;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    .hero-title {
+      font-size: clamp(2.25rem, 5.2vw, 3.75rem);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.35rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Contenedor de animación caligráfica línea por línea */
+    .brush-title-wrapper {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: auto;
+      max-width: 100%;
+    }
+
+    /* Cada renglón individual conserva su ancho exacto para sincronizar el recorrido */
+    .brush-line {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .brush-line-ghost {
+      visibility: hidden;
+      display: inline-block;
+      user-select: none;
+    }
+
+    .brush-line-reveal {
+      position: absolute;
+      inset: 0;
+      clip-path: inset(-10% 102% -12% -2%);
+      will-change: clip-path;
+    }
+
+    /* Revelado secuencial por renglón (total ~5.2s + 0.3s retardo) */
+    .brush-line-1 .brush-line-reveal {
+      animation: revealLineOne 5.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+    }
+
+    .brush-line-2 .brush-line-reveal {
+      animation: revealLineTwo 5.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+    }
+
+    .brush-line-3 .brush-line-reveal {
+      animation: revealLineThree 5.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+    }
+
+    /* Pincel SVG caligráfico con movimiento de muñeca y salto entre renglones */
+    .paint-brush-cursor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 62px;
+      height: 62px;
+      pointer-events: none;
+      z-index: 20;
+      opacity: 0;
+      filter: drop-shadow(0 8px 16px rgba(56, 189, 248, 0.7));
+      transform-origin: 10% 90%;
+      will-change: left, top, transform, opacity;
+      animation: calligraphyBrushStroke 5.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    }
+
+    /* Estela de pintura cian en la punta de las cerdas (se atenúa al levantar el pincel) */
+    .brush-tip-glow {
+      animation: brushContactGlow 5.2s ease-in-out 0.3s forwards;
+    }
+
+    /* Línea 1: 0% -> 31% */
+    @keyframes revealLineOne {
+      0% {
+        clip-path: inset(-10% 102% -12% -2%);
+      }
+      8% {
+        clip-path: inset(-10% 76% -12% -2%);
+      }
+      18% {
+        clip-path: inset(-10% 42% -12% -2%);
+      }
+      27% {
+        clip-path: inset(-10% 10% -12% -2%);
+      }
+      31%, 100% {
+        clip-path: inset(-10% -2% -12% -2%);
+      }
+    }
+
+    /* Línea 2: 37% -> 58% */
+    @keyframes revealLineTwo {
+      0%, 36.5% {
+        clip-path: inset(-10% 102% -12% -2%);
+      }
+      43% {
+        clip-path: inset(-10% 72% -12% -2%);
+      }
+      51% {
+        clip-path: inset(-10% 34% -12% -2%);
+      }
+      56% {
+        clip-path: inset(-10% 8% -12% -2%);
+      }
+      59%, 100% {
+        clip-path: inset(-10% -2% -12% -2%);
+      }
+    }
+
+    /* Línea 3: 65% -> 95% */
+    @keyframes revealLineThree {
+      0%, 64.5% {
+        clip-path: inset(-10% 102% -12% -2%);
+      }
+      73% {
+        clip-path: inset(-10% 74% -12% -2%);
+      }
+      82% {
+        clip-path: inset(-10% 38% -12% -2%);
+      }
+      90% {
+        clip-path: inset(-10% 11% -12% -2%);
+      }
+      95%, 100% {
+        clip-path: inset(-10% -2% -12% -2%);
+      }
+    }
+
+    /* Recorrido caligráfico detallado del pincel con vaivén en Y, inclinación -6deg a +8deg y saltos de línea */
+    @keyframes calligraphyBrushStroke {
+      /* Inicio sobre Línea 1 ("Diseño y desarrollo") */
+      0% {
+        left: -1%;
+        top: 16%;
+        opacity: 0;
+        transform: translate(-12%, -82%) rotate(-6deg) scale(0.95);
+      }
+      2.5% {
+        left: 2%;
+        top: 19%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-3deg) scale(1);
+      }
+      8% {
+        left: 23%;
+        top: 16.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(4deg) scale(1.02);
+      }
+      14% {
+        left: 44%;
+        top: 20%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-5deg) scale(0.99);
+      }
+      20% {
+        left: 65%;
+        top: 17%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(6deg) scale(1.02);
+      }
+      26% {
+        left: 85%;
+        top: 19.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-2deg) scale(1);
+      }
+      31% {
+        left: 96%;
+        top: 18%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(4deg) scale(1);
+      }
+
+      /* Levanta suavemente la mano y salta al inicio de Línea 2 ("interfaces web") */
+      34% {
+        left: 48%;
+        top: 31%;
+        opacity: 0.88;
+        transform: translate(-12%, -94%) rotate(8deg) scale(1.05);
+      }
+      36.5% {
+        left: 0%;
+        top: 51%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-6deg) scale(1);
+      }
+
+      /* Trazo sobre Línea 2 */
+      42% {
+        left: 19%;
+        top: 53.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(3deg) scale(1.02);
+      }
+      48% {
+        left: 40%;
+        top: 50.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-4deg) scale(0.99);
+      }
+      54% {
+        left: 59%;
+        top: 53%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(5deg) scale(1.02);
+      }
+      59% {
+        left: 68%;
+        top: 51.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(2deg) scale(1);
+      }
+
+      /* Levanta suavemente la mano y salta al inicio de Línea 3 ("ultrarrápidas con React") */
+      62% {
+        left: 34%;
+        top: 66%;
+        opacity: 0.88;
+        transform: translate(-12%, -94%) rotate(8deg) scale(1.05);
+      }
+      64.5% {
+        left: 0%;
+        top: 84%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-6deg) scale(1);
+      }
+
+      /* Trazo final sobre Línea 3 */
+      71% {
+        left: 22%;
+        top: 86.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(4deg) scale(1.02);
+      }
+      78% {
+        left: 46%;
+        top: 83.5%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-5deg) scale(0.99);
+      }
+      85% {
+        left: 71%;
+        top: 86%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(6deg) scale(1.02);
+      }
+      91% {
+        left: 90%;
+        top: 84%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(-2deg) scale(1);
+      }
+      95% {
+        left: 100%;
+        top: 85%;
+        opacity: 1;
+        transform: translate(-12%, -82%) rotate(3deg) scale(1);
+      }
+
+      /* Retirada natural y elegante del pincel al completar la firma */
+      100% {
+        left: 106%;
+        top: 76%;
+        opacity: 0;
+        transform: translate(-12%, -98%) rotate(8deg) scale(0.86);
+      }
+    }
+
+    @keyframes brushContactGlow {
+      0%, 2% { opacity: 0.2; r: 3.5; }
+      4%, 30% { opacity: 0.95; r: 6; }
+      33%, 35.5% { opacity: 0.25; r: 3; }
+      37.5%, 58% { opacity: 0.95; r: 6; }
+      61%, 63.5% { opacity: 0.25; r: 3; }
+      65.5%, 94% { opacity: 1; r: 6.5; }
+      100% { opacity: 0; r: 2; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brush-line-reveal {
+        clip-path: inset(0 0 0 0) !important;
+        animation: none !important;
+      }
+      .paint-brush-cursor {
+        display: none;
+      }
+      .hanging-badge-assembly,
+      .hanging-badge-card {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       CREDENCIAL / FOTO COLGANTE CON TIRANTE DESDE ARRIBA (CSS PURO)
+       ========================================================================== */
+    .hero-visual-stack {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    /* Ensamblaje del tirante + pinza + marco que desciende lentamente desde arriba */
+    .hanging-badge-assembly {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform-origin: top center;
+      z-index: 15;
+      will-change: transform, opacity;
+      animation:
+        slowDropFromTop 3.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both,
+        gentlePendulumIdle 6.5s ease-in-out 3.8s infinite;
+    }
+
+    /* Tirante / cinta textil estilizada que nace desde el borde superior */
+    .lanyard-strap {
+      position: relative;
+      width: 24px;
+      height: 118px;
+      margin-top: -42px;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          rgba(255, 255, 255, 0.04) 0px,
+          rgba(255, 255, 255, 0.04) 3px,
+          transparent 3px,
+          transparent 6px
+        ),
+        linear-gradient(180deg, #090d16 0%, #1e293b 48%, #0284c7 100%);
+      border-left: 1px solid rgba(97, 218, 251, 0.35);
+      border-right: 1px solid rgba(97, 218, 251, 0.35);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* Línea central luminosa en la cinta del tirante */
+    .lanyard-strap::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 50%;
+      width: 2px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, transparent, rgba(97, 218, 251, 0.65));
+    }
+
+    /* Pinza metálica y anilla de sujeción */
+    .lanyard-clasp {
+      position: relative;
+      width: 30px;
+      height: 22px;
+      margin-top: -3px;
+      background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 50%, #475569 100%);
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55);
+      z-index: 2;
+    }
+
+    /* Anilla metálica inferior */
+    .lanyard-clasp::after {
+      content: "";
+      position: absolute;
+      bottom: -9px;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      transform: translateX(-50%);
+      border: 2.5px solid #cbd5e1;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Marco Glassmorphism de la fotografía */
+    .hanging-badge-card {
+      position: relative;
+      width: 228px;
+      margin-top: 6px;
+      padding: 0.75rem 0.75rem 0.95rem;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(97, 218, 251, 0.48);
+      border-radius: 18px;
+      box-shadow:
+        0 24px 42px -12px rgba(0, 0, 0, 0.75),
+        0 0 28px rgba(56, 189, 248, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Ranura superior de la credencial */
+    .badge-slot {
+      width: 44px;
+      height: 6px;
+      margin: 0 auto 0.65rem;
+      border-radius: var(--radius-full);
+      background: #090d16;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+    }
+
+    .badge-photo-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1.06;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: linear-gradient(160deg, #1e293b 0%, #0b1120 100%);
+    }
+
+    .badge-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      filter: grayscale(100%) contrast(1.08) brightness(1.02);
+      transition: transform 0.5s ease;
+    }
+
+    /* Reflejo sutil estilo mica/glass sobre la foto */
+    .badge-photo-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0.16) 0%,
+        rgba(255, 255, 255, 0.03) 38%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    .badge-meta {
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .badge-name {
+      display: block;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .badge-role-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+      padding: 0.22rem 0.65rem;
+      border-radius: var(--radius-full);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(97, 218, 251, 0.32);
+      color: var(--accent-react);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* Interacción suave al pasar el cursor (hover) */
+    .hanging-badge-assembly:hover .hanging-badge-card {
+      transform: rotate(-2.5deg) translateY(-4px) scale(1.02);
+      border-color: var(--accent-react);
+      box-shadow:
+        0 28px 48px -12px rgba(0, 0, 0, 0.82),
+        0 0 36px rgba(97, 218, 251, 0.38);
+    }
+
+    .hanging-badge-assembly:hover .badge-photo-frame img {
+      transform: scale(1.04);
+    }
+
+    /* Animación lenta de descenso desde la parte superior con inercia natural */
+    @keyframes slowDropFromTop {
+      0% {
+        opacity: 0;
+        transform: translateY(-110%) rotate(-5deg);
+      }
+      18% {
+        opacity: 1;
+      }
+      62% {
+        opacity: 1;
+        transform: translateY(10px) rotate(3.2deg);
+      }
+      78% {
+        transform: translateY(-4px) rotate(-2deg);
+      }
+      90% {
+        transform: translateY(2px) rotate(0.9deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+
+    /* Sutil movimiento de péndulo en reposo tras estabilizarse */
+    @keyframes gentlePendulumIdle {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1.35deg);
+      }
+      75% {
+        transform: rotate(-1.35deg);
+      }
+    }
+
+    .hero-description {
+      font-size: 1.12rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin-bottom: 2.2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .metric-item strong {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .metric-item span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Tarjeta Interactiva / Decorativa de Código JSX */
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-glow-orb {
+      position: absolute;
+      inset: -15px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(129, 140, 248, 0.2));
+      filter: blur(36px);
+      border-radius: var(--radius-lg);
+      z-index: -1;
+    }
+
+    .code-window {
+      background: #0b1120;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      overflow: hidden;
+      transition: transform var(--transition-smooth), border-color var(--transition-smooth);
+    }
+
+    .code-window:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent-react);
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.25rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .window-dots span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .window-dots span:nth-child(1) { background: #ef4444; }
+    .window-dots span:nth-child(2) { background: #f59e0b; }
+    .window-dots span:nth-child(3) { background: #10b981; }
+
+    .code-filename {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .code-body {
+      padding: 1.4rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.75;
+      overflow-x: auto;
+      color: #e2e8f0;
+    }
+
+    /* Sintaxis JSX coloreada */
+    .tk-kw { color: #c084fc; }      /* import, export, const, return */
+    .tk-fn { color: #38bdf8; }      /* nombres de funciones/componentes */
+    .tk-tag { color: #61dafb; }     /* etiquetas JSX */
+    .tk-attr { color: #93c5fd; }    /* props / atributos */
+    .tk-str { color: #34d399; }     /* strings */
+    .tk-cm { color: #64748b; font-style: italic; } /* comentarios */
+
+    .code-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      background: rgba(56, 189, 248, 0.06);
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.78rem;
+      color: var(--accent-primary);
+    }
+
+    .badge-lighthouse {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       6. SECCIÓN DE SERVICIOS (CSS GRID)
+       ========================================================================== */
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      transition: all var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .service-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(129, 140, 248, 0.12));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      display: grid;
+      place-items: center;
+      color: var(--accent-react);
+      margin-bottom: 1.5rem;
+      transition: transform var(--transition-fast);
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.08);
+    }
+
+    .service-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .service-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .service-features li::before {
+      content: "✓";
+      color: var(--accent-primary);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       7. PROYECTOS DESTACADOS CON VISTAS PREVIAS ESTILIZADAS EN CSS
+       ========================================================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all var(--transition-smooth);
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--border-accent);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    /* Mockups visuales construidos con CSS puro */
+    .project-preview {
+      height: 215px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* Tema Mockup 1: E-Commerce */
+    .preview-ecommerce {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .mock-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.05);
+      padding: 0.45rem 0.75rem;
+      border-radius: 6px;
+    }
+    .mock-pill {
+      height: 8px;
+      width: 55px;
+      background: var(--accent-primary);
+      border-radius: 99px;
+    }
+    .mock-shop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.65rem;
+      margin-top: 0.85rem;
+    }
+    .mock-product-box {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 8px;
+      padding: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: transform var(--transition-fast);
+    }
+    .project-card:hover .mock-product-box {
+      transform: translateY(-3px);
+    }
+    .mock-img-placeholder {
+      height: 54px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(129, 140, 248, 0.25));
+    }
+    .mock-line {
+      height: 6px;
+      border-radius: 4px;
+      background: rgba(148, 163, 184, 0.3);
+      width: 80%;
+    }
+    .mock-line.short { width: 45%; background: var(--accent-react); }
+
+    /* Tema Mockup 2: Dashboard SaaS */
+    .preview-dashboard {
+      background: linear-gradient(135deg, #090d16 0%, #131c31 100%);
+    }
+    .mock-dash-layout {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 0.75rem;
+      height: 100%;
+    }
+    .mock-sidebar {
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 8px;
+      padding: 0.6rem 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .mock-sidebar span {
+      width: 22px;
+      height: 6px;
+      border-radius: 4px;
+      background: rgba(148, 163, 184, 0.25);
+    }
+    .mock-sidebar span:first-child { background: var(--accent-primary); }
+    .mock-chart-area {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .mock-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 95px;
+      padding-top: 0.5rem;
+    }
+    .mock-bars div {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, rgba(56, 189, 248, 0.25), var(--accent-primary));
+      transition: height var(--transition-smooth);
+    }
+
+    /* Tema Mockup 3: Landing Page Interactiva */
+    .preview-landing {
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.22), #0f172a 70%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .mock-hero-card {
+      width: 86%;
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(97, 218, 251, 0.35);
+      border-radius: 12px;
+      padding: 1.1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .mock-hero-badge {
+      width: 60px;
+      height: 8px;
+      margin: 0 auto 0.65rem;
+      border-radius: 99px;
+      background: rgba(56, 189, 248, 0.4);
+    }
+    .mock-hero-title {
+      width: 75%;
+      height: 12px;
+      margin: 0 auto 0.5rem;
+      border-radius: 4px;
+      background: #f8fafc;
+    }
+    .mock-hero-sub {
+      width: 55%;
+      height: 8px;
+      margin: 0 auto 0.9rem;
+      border-radius: 4px;
+      background: #64748b;
+    }
+    .mock-hero-btn {
+      width: 84px;
+      height: 22px;
+      margin: 0 auto;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    }
+
+    .project-content {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.65rem;
+    }
+
+    .project-desc {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tech-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-react);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+    }
+
+    .project-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: color var(--transition-fast);
+    }
+
+    .project-link:hover {
+      color: var(--accent-primary);
+    }
+
+    /* ==========================================================================
+       8. STACK TECNOLÓGICO & PROCESO DE TRABAJO
+       ========================================================================== */
+    .stack-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .stack-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+    }
+
+    .skill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.65rem 1.2rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all var(--transition-fast);
+    }
+
+    .skill-badge:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-react);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.15);
+    }
+
+    .skill-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+    }
+
+    /* Pasos del Proceso */
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .process-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.85rem;
+      position: relative;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .process-step:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #090d16;
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .process-step h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .process-step p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       9. SECCIÓN DE CONTACTO & FORMULARIO
+       ========================================================================== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .contact-info h3 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .contact-info p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .contact-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      display: grid;
+      place-items: center;
+      color: var(--accent-primary);
+      flex-shrink: 0;
+    }
+
+    .contact-item-text span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .contact-item-text strong {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 0.85rem;
+    }
+
+    .social-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-subtle);
+      display: grid;
+      place-items: center;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+
+    .social-btn:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      transform: translateY(-3px);
+    }
+
+    /* Formulario Estilizado */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .form-group label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      background: rgba(9, 13, 22, 0.75);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* ==========================================================================
+       10. FOOTER
+       ========================================================================== */
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 0;
+      margin-top: 3rem;
+      background: rgba(9, 13, 22, 0.6);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .footer-copy {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       11. MEDIA QUERIES (TABLET & DESKTOP)
+       ========================================================================== */
+    @media (min-width: 768px) {
+      .nav-hamburger {
+        display: none;
+      }
+
+      .nav-menu {
+        position: static;
+        width: auto;
+        background: transparent;
+        backdrop-filter: none;
+        border-bottom: none;
+        padding: 0;
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact-grid {
+        padding: 3rem;
+      }
+
+      .cert-slide-card {
+        flex: 0 0 calc(50% - 0.75rem);
+      }
+
+      .footer-inner {
+        flex-direction: row;
+        text-align: left;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1.08fr 0.92fr;
+        align-items: start;
+      }
+
+      .hero-content {
+        padding-top: 1.5rem;
+      }
+
+      .projects-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .cert-slide-card {
+        flex: 0 0 calc(33.333% - 1rem);
+      }
+
+      .process-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .contact-grid {
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 3.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+       1. NAVBAR FIJO CON GLASSMORPHISM
+       ======================================================================== -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#inicio" class="brand-logo" aria-label="Inicio Wilbert Gordillo Escobar">
+        <span class="brand-icon">
+          <!-- Icono SVG React Atom -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="2.2" fill="currentColor"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.2"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/>
+          </svg>
+        </span>
+        <span>Wilbert<span class="gradient-text">.react</span></span>
+      </a>
+
+      <!-- Control menú móvil sin JavaScript -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Abrir menú de navegación">
+      <label for="nav-toggle" class="nav-hamburger" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+
+      <nav class="nav-menu" aria-label="Navegación principal">
+        <a href="#inicio" class="nav-link">Inicio</a>
+        <a href="#servicios" class="nav-link">Servicios</a>
+        <a href="#certificados" class="nav-link">Certificados</a>
+        <a href="#stack" class="nav-link">Stack</a>
+        <a href="#contacto" class="nav-link">Contacto</a>
+        <a href="#contacto" class="btn btn-primary nav-cta">Cotizar Proyecto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ======================================================================
+         2. HERO SECTION
+         ====================================================================== -->
+    <section id="inicio" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-availability">
+            <span class="status-dot"></span>
+            Disponible para nuevos proyectos freelance
+          </div>
+
+          <h1 class="hero-title">
+            <span class="brush-title-wrapper">
+              <!-- Línea 1: Diseño y desarrollo -->
+              <span class="brush-line brush-line-1">
+                <span class="brush-line-ghost" aria-hidden="true">Diseño y desarrollo</span>
+                <span class="brush-line-reveal">Diseño y desarrollo</span>
+              </span>
+
+              <!-- Línea 2: interfaces web -->
+              <span class="brush-line brush-line-2">
+                <span class="brush-line-ghost" aria-hidden="true">interfaces web</span>
+                <span class="brush-line-reveal">interfaces web</span>
+              </span>
+
+              <!-- Línea 3: ultrarrápidas con React -->
+              <span class="brush-line brush-line-3">
+                <span class="brush-line-ghost" aria-hidden="true"><span class="gradient-text">ultrarrápidas con React</span></span>
+                <span class="brush-line-reveal"><span class="gradient-text">ultrarrápidas con React</span></span>
+              </span>
+
+              <!-- Pincel SVG caligráfico con cerdas iluminadas en azul cian eléctrico -->
+              <svg class="paint-brush-cursor" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="brushHandle" x1="58" y1="6" x2="26" y2="38" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="55%" stop-color="#334155"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                  </linearGradient>
+                  <linearGradient id="brushFerrule" x1="30" y1="34" x2="21" y2="43" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#cbd5e1"/>
+                    <stop offset="50%" stop-color="#94a3b8"/>
+                    <stop offset="100%" stop-color="#475569"/>
+                  </linearGradient>
+                  <linearGradient id="brushBristles" x1="23" y1="41" x2="6" y2="58" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#0284c7"/>
+                    <stop offset="50%" stop-color="#38bdf8"/>
+                    <stop offset="100%" stop-color="#61dafb"/>
+                  </linearGradient>
+                  <radialGradient id="brushAura" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#61dafb" stop-opacity="0.95"/>
+                    <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <!-- Halo suave de pintura luminosa en la punta -->
+                <circle cx="7.5" cy="56.5" r="11" fill="url(#brushAura)"/>
+                <!-- Mango ergonómico -->
+                <path d="M57.5 6.5C59.8 8.8 59.4 12.8 56.5 16.2L31.5 36.5L27.5 32.5L47.8 7.5C51.2 4.6 55.2 4.2 57.5 6.5Z" fill="url(#brushHandle)" stroke="#38bdf8" stroke-width="1.2"/>
+                <!-- Virola metálica -->
+                <path d="M27.5 32.5L31.5 36.5L24.5 43.5L20.5 39.5L27.5 32.5Z" fill="url(#brushFerrule)"/>
+                <!-- Cerdas del pincel impregnadas de luz cian -->
+                <path d="M20.5 39.5L24.5 43.5C21.5 49.5 15.5 55.2 6.5 57.5C8.8 48.5 14.5 42.5 20.5 39.5Z" fill="url(#brushBristles)"/>
+                <!-- Destello en la punta del pincel -->
+                <circle class="brush-tip-glow" cx="7.5" cy="56.5" r="5" fill="#61dafb"/>
+              </svg>
+            </span>
+          </h1>
+
+          <p class="hero-description">
+            Transformo ideas y diseños complejos en aplicaciones web modernas, escalables y centradas en la conversión. Especialista en arquitectura frontend, UI/UX de alto impacto y rendimiento web.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#certificados" class="btn btn-primary">
+              Ver Certificados
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="#contacto" class="btn btn-secondary">
+              Cotizar Proyecto
+            </a>
+          </div>
+
+          <div class="hero-metrics">
+            <div class="metric-item">
+              <strong>+45</strong>
+              <span>Proyectos en React</span>
+            </div>
+            <div class="metric-item">
+              <strong>99/100</strong>
+              <span>Performance Lighthouse</span>
+            </div>
+            <div class="metric-item">
+              <strong>+5 años</strong>
+              <span>Experiencia UI & Frontend</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna visual: Foto colgante con tirante desde arriba + Tarjeta JSX -->
+        <div class="hero-visual-stack">
+          <!-- Credencial / Foto colgante con tirante estilizado -->
+          <div class="hanging-badge-assembly" aria-label="Credencial de diseñador web">
+            <div class="lanyard-strap" aria-hidden="true"></div>
+            <div class="lanyard-clasp" aria-hidden="true"></div>
+            <div class="hanging-badge-card">
+              <div class="badge-slot" aria-hidden="true"></div>
+              <div class="badge-photo-frame">
+                <img
+                  src="/foto.png"
+                  alt="Retrato profesional de Wilbert Gordillo Escobar — Frontend & React Designer"
+                  loading="eager"
+                >
+              </div>
+              <div class="badge-meta">
+                <span class="badge-name">Wilbert Gordillo Escobar</span>
+                <span class="badge-role-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="12" cy="12" r="2.2" fill="currentColor"/>
+                    <ellipse cx="12" cy="12" rx="10" ry="4.2"/>
+                    <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/>
+                  </svg>
+                  Frontend &amp; React Designer
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta visual decorativa/interactiva de código JSX/React -->
+          <div class="hero-visual" style="width: 100%;">
+            <div class="hero-glow-orb"></div>
+            <div class="code-window">
+              <div class="code-header">
+                <div class="window-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="code-filename">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#61dafb" stroke-width="2">
+                    <circle cx="12" cy="12" r="2"/>
+                    <ellipse cx="12" cy="12" rx="10" ry="4"/>
+                    <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/>
+                  </svg>
+                  WebExperience.jsx
+                </div>
+              </div>
+
+              <pre class="code-body"><code><span class="tk-kw">import</span> { useState } <span class="tk-kw">from</span> <span class="tk-str">'react'</span>;
+
+<span class="tk-cm">// Arquitectura modular orientada a resultados</span>
+<span class="tk-kw">export function</span> <span class="tk-fn">WebExperience</span>({ client }) {
+  <span class="tk-kw">const</span> [status] = useState(<span class="tk-str">'Optimizado'</span>);
+
+  <span class="tk-kw">return</span> (
+    &lt;<span class="tk-tag">Application</span>
+      <span class="tk-attr">framework</span>=<span class="tk-str">"React 19 + TypeScript"</span>
+      <span class="tk-attr">designSystem</span>=<span class="tk-str">"Pixel-Perfect UI"</span>
+      <span class="tk-attr">seoReady</span>={<span class="tk-kw">true</span>}
+      <span class="tk-attr">performance</span>={status}
+    &gt;
+      &lt;<span class="tk-tag">ConversionHero</span> <span class="tk-attr">brand</span>={client} /&gt;
+    &lt;/<span class="tk-tag">Application</span>&gt;
+  );
+}</code></pre>
+
+              <div class="code-footer-bar">
+                <span>JSX • Componente Listo para Producción</span>
+                <span class="badge-lighthouse">⚡ 100% Core Web Vitals</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. SECCIÓN DE SERVICIOS
+         ====================================================================== -->
+    <section id="servicios" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Servicios Especializados</span>
+          <h2 class="section-title">Soluciones frontend diseñadas para <span class="gradient-text">hacer crecer tu negocio</span></h2>
+          <p class="section-subtitle">
+            Combino diseño visual estratégico con ingeniería limpia en React para crear productos digitales memorables.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <!-- Servicio 1 -->
+          <article class="service-card">
+            <div>
+              <div class="service-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+              </div>
+              <h3 class="service-title">Desarrollo SPA con React</h3>
+              <p class="service-desc">
+                Construcción de aplicaciones web interactivas de una sola página (Single Page Applications) con arquitectura de componentes reutilizables y gestión de estado eficiente.
+              </p>
+            </div>
+            <ul class="service-features">
+              <li>Componentes modulares y escalables</li>
+              <li>Integración limpia con APIs REST / GraphQL</li>
+              <li>Código tipado con TypeScript</li>
+            </ul>
+          </article>
+
+          <!-- Servicio 2 -->
+          <article class="service-card">
+            <div>
+              <div class="service-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                  <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+              </div>
+              <h3 class="service-title">Diseño UI/UX & Maquetación Web</h3>
+              <p class="service-desc">
+                Diseño de interfaces modernas centradas en la experiencia de usuario, sistemas de diseño consistentes y maquetación responsiva adaptable a cualquier dispositivo.
+              </p>
+            </div>
+            <ul class="service-features">
+              <li>Diseño Mobile-First y accesible (WCAG)</li>
+              <li>Micro-interacciones y animaciones fluidas</li>
+              <li>De Figma a código React impecable</li>
+            </ul>
+          </article>
+
+          <!-- Servicio 3 -->
+          <article class="service-card">
+            <div>
+              <div class="service-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <h3 class="service-title">Optimización de Rendimiento y SEO</h3>
+              <p class="service-desc">
+                Auditoría y mejora radical de tiempos de carga, Core Web Vitals y estructura semántica para maximizar la retención de usuarios y el posicionamiento orgánico.
+              </p>
+            </div>
+            <ul class="service-features">
+              <li>Code-splitting y carga diferida (Lazy Loading)</li>
+              <li>Optimización de assets y renderizado</li>
+              <li>Puntuaciones +95 en Google Lighthouse</li>
+            </ul>
+          </article>
+
+          <!-- Servicio 4 -->
+          <article class="service-card">
+            <div>
+              <div class="service-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+              </div>
+              <h3 class="service-title">Migración a React / Next.js</h3>
+              <p class="service-desc">
+                Modernización de sitios web heredados o plantillas lentas hacia un ecosistema moderno basado en React y Next.js con renderizado híbrido (SSR/SSG).
+              </p>
+            </div>
+            <ul class="service-features">
+              <li>Migración progresiva sin pérdida de tráfico</li>
+              <li>Arquitectura preparada para escalar</li>
+              <li>Despliegue continuo en Vercel o AWS</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4.5 SECCIÓN DE CERTIFICACIONES Y FORMACIÓN (CARRUSEL CSS PURO)
+         ====================================================================== -->
+    <section id="certificados" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Credenciales Verificadas</span>
+          <h2 class="section-title">Certificaciones y <span class="gradient-text">Formación Académica</span></h2>
+          <p class="section-subtitle">
+            Desliza el carrusel y haz clic en cualquier certificado para abrir el documento oficial en pantalla completa.
+          </p>
+        </div>
+
+        <div class="cert-carousel-wrapper">
+          <div class="cert-carousel-track" role="region" aria-label="Carrusel de certificados de Wilbert Gordillo Escobar">
+            <!-- Tarjeta 1: Front-End Development with React -->
+            <a href="#cert-modal-1" id="cert-slide-1" class="cert-slide-card" aria-label="Ver certificado Front-End Development with React">
+              <div>
+                <div class="cert-card-top">
+                  <div class="cert-seal-mini">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="2.2" fill="currentColor"/>
+                      <ellipse cx="12" cy="12" rx="10" ry="4.2"/>
+                      <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/>
+                      <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/>
+                    </svg>
+                  </div>
+                  <span class="cert-date-pill">17.05.2023</span>
+                </div>
+                <img class="cert-card-preview" src="/portafolio1.png" alt="Vista previa de Front-End Development with React" />
+                <p class="cert-issuer">Academlo • School of Technology</p>
+                <h3 class="cert-card-title">Front-End Development with React</h3>
+                <p class="cert-card-meta">
+                  Otorgado a <strong>Wilbert Gordillo Escobar</strong> por completar exitosamente el módulo especializado de desarrollo frontend con React.
+                </p>
+              </div>
+              <div class="cert-card-footer">
+                <span class="cert-id-tag">ID: 41515159196136</span>
+                <span class="cert-open-hint">
+                  Ver archivo
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M15 3h6v6"></path>
+                    <path d="M10 14L21 3"></path>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <!-- Tarjeta 2: Back-End Development with Node.js -->
+            <a href="#cert-modal-2" id="cert-slide-2" class="cert-slide-card" aria-label="Ver certificado Back-End Development with Node.js">
+              <div>
+                <div class="cert-card-top">
+                  <div class="cert-seal-mini">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                  </div>
+                  <span class="cert-date-pill">13.07.2023</span>
+                </div>
+                <img class="cert-card-preview" src="/portafolio2.png" alt="Vista previa de Back-End Development with Node.js" />
+                <p class="cert-issuer">Academlo • School of Technology</p>
+                <h3 class="cert-card-title">Back-End Development with Node.js</h3>
+                <p class="cert-card-meta">
+                  Otorgado a <strong>Wilbert Gordillo Escobar</strong> por completar exitosamente el módulo de desarrollo backend, APIs y arquitectura servidor con Node.js.
+                </p>
+              </div>
+              <div class="cert-card-footer">
+                <span class="cert-id-tag">ID: 48674169200672</span>
+                <span class="cert-open-hint">
+                  Ver archivo
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M15 3h6v6"></path>
+                    <path d="M10 14L21 3"></path>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <!-- Tarjeta 3: Foundations in HTML, CSS, and Javascript -->
+            <a href="#cert-modal-3" id="cert-slide-3" class="cert-slide-card" aria-label="Ver certificado Foundations in HTML, CSS, and Javascript">
+              <div>
+                <div class="cert-card-top">
+                  <div class="cert-seal-mini">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="16 18 22 12 16 6"></polyline>
+                      <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                  </div>
+                  <span class="cert-date-pill">22.03.2023</span>
+                </div>
+                <img class="cert-card-preview" src="/portafolio3.png" alt="Vista previa de Foundations in HTML, CSS, and Javascript" />
+                <p class="cert-issuer">Academlo • School of Technology</p>
+                <h3 class="cert-card-title">Foundations in HTML, CSS, and Javascript</h3>
+                <p class="cert-card-meta">
+                  Otorgado a <strong>Wilbert Gordillo Escobar</strong> por dominar los fundamentos esenciales de maquetación web, estilos responsivos y JavaScript.
+                </p>
+              </div>
+              <div class="cert-card-footer">
+                <span class="cert-id-tag">ID: 89060542903022</span>
+                <span class="cert-open-hint">
+                  Ver archivo
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M15 3h6v6"></path>
+                    <path d="M10 14L21 3"></path>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <!-- Tarjeta 4: I Congreso Internacional IA y Sistemas Complejos Cusco 2024 -->
+            <a href="#cert-modal-4" id="cert-slide-4" class="cert-slide-card" aria-label="Ver certificado I Congreso Internacional de Investigación en Inteligencia Artificial Cusco 2024">
+              <div>
+                <div class="cert-card-top">
+                  <div class="cert-seal-mini">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                      <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                    </svg>
+                  </div>
+                  <span class="cert-date-pill">16.08.2024</span>
+                </div>
+                <img class="cert-card-preview" src="/portafolio4.png" alt="Vista previa del Congreso Internacional de Inteligencia Artificial" />
+                <p class="cert-issuer">Universidad Tecnológica de los Andes • Cusco</p>
+                <h3 class="cert-card-title">I Congreso Internacional de Investigación en IA y Sistemas Complejos</h3>
+                <p class="cert-card-meta">
+                  Participación en calidad de <strong>Asistente</strong> — Facultad de Ingeniería, Escuela Profesional de Ingeniería de Sistemas e Informática Filial Cusco.
+                </p>
+              </div>
+              <div class="cert-card-footer">
+                <span class="cert-id-tag">UTEA • Filial Cusco 2024</span>
+                <span class="cert-open-hint">
+                  Ver archivo
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M15 3h6v6"></path>
+                    <path d="M10 14L21 3"></path>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  </svg>
+                </span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Navegación rápida del carrusel por anclas CSS -->
+          <div class="cert-carousel-controls">
+            <div class="cert-dots-nav" aria-label="Navegar entre certificados">
+              <a href="#cert-slide-1" class="cert-dot-btn">01 • React</a>
+              <a href="#cert-slide-2" class="cert-dot-btn">02 • Node.js</a>
+              <a href="#cert-slide-3" class="cert-dot-btn">03 • HTML/CSS/JS</a>
+              <a href="#cert-slide-4" class="cert-dot-btn">04 • Congreso IA</a>
+            </div>
+            <a href="/portafolio1.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 0.55rem 1.1rem; font-size: 0.84rem;">
+              Abrir PDF Completo (4 págs.)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. STACK TECNOLÓGICO & PROCESO DE TRABAJO
+         ====================================================================== -->
+    <section id="stack" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Tecnologías & Metodología</span>
+          <h2 class="section-title">Stack moderno y un proceso <span class="gradient-text">transparente de trabajo</span></h2>
+          <p class="section-subtitle">
+            Herramientas probadas en producción junto a un flujo de trabajo claro de principio a fin.
+          </p>
+        </div>
+
+        <!-- Badges de Habilidades -->
+        <div class="stack-wrapper">
+          <h3 style="font-size: 1.15rem; font-weight: 700;">Tecnologías principales que domino</h3>
+          <div class="stack-badges">
+            <span class="skill-badge"><span class="skill-dot" style="background:#61dafb;"></span>React 19</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#e34f26;"></span>HTML5 Semántico</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#38bdf8;"></span>CSS3 / Grid / Flexbox</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#f7df1e;"></span>JavaScript ES6+</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#3178c6;"></span>TypeScript</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#f8fafc;"></span>Next.js</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#f05032;"></span>Git & GitHub</span>
+            <span class="skill-badge"><span class="skill-dot" style="background:#a855f7;"></span>Diseño UI / Figma</span>
+          </div>
+        </div>
+
+        <!-- 4 Pasos del Proceso -->
+        <div class="process-grid">
+          <div class="process-step">
+            <span class="step-number">01</span>
+            <h3>Descubrimiento</h3>
+            <p>Analizamos tus objetivos de negocio, público objetivo y requerimientos técnicos para definir el alcance exacto.</p>
+          </div>
+
+          <div class="process-step">
+            <span class="step-number">02</span>
+            <h3>Diseño UI</h3>
+            <p>Creamos la arquitectura visual y prototipos responsivos enfocados en claridad, jerarquía y experiencia de usuario.</p>
+          </div>
+
+          <div class="process-step">
+            <span class="step-number">03</span>
+            <h3>Desarrollo en React</h3>
+            <p>Codificamos componentes limpios, reutilizables y optimizados con animaciones fluidas y pruebas en dispositivos reales.</p>
+          </div>
+
+          <div class="process-step">
+            <span class="step-number">04</span>
+            <h3>Lanzamiento</h3>
+            <p>Desplegamos en producción con auditoría final de velocidad, SEO técnico y soporte post-lanzamiento garantizado.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         6. SECCIÓN DE CONTACTO
+         ====================================================================== -->
+    <section id="contacto" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Hablemos de tu proyecto</span>
+          <h2 class="section-title">¿Listo para llevar tu web <span class="gradient-text">al siguiente nivel?</span></h2>
+          <p class="section-subtitle">
+            Cuéntame sobre tu idea y te responderé en menos de 24 horas con una propuesta a medida.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <!-- Información directa y redes -->
+          <div class="contact-info">
+            <h3>Información de contacto</h3>
+            <p>
+              Disponible para desarrollo de aplicaciones web en React, rediseño de plataformas SaaS y consultoría frontend.
+            </p>
+
+            <div class="contact-methods">
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <span>Correo Electrónico</span>
+                  <strong>wilbertgescobar48@gmail.com</strong>
+                </div>
+              </div>
+
+              <a href="https://wa.me/51957753284" target="_blank" rel="noopener noreferrer" class="contact-item" aria-label="Contactar por WhatsApp al 957753284">
+                <div class="contact-item-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    <path d="M8.5 8.5c.5 3 2 4.5 5 5l1-1.5 2 1c-.5 1-1.5 2-3 2-3 0-5.5-2.5-6.5-5.5-.5-1.5.5-2.5 1.5-3l1 2z"></path>
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <span>WhatsApp</span>
+                  <strong>+51 957 753 284</strong>
+                </div>
+              </a>
+
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <span>Ubicación & Modalidad</span>
+                  <strong>Cusco, Perú • Remoto Global (GMT-5)</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="social-links" aria-label="Redes sociales">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="GitHub">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="X / Twitter">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Formulario de contacto funcional con validación HTML5 -->
+          <form class="contact-form" action="mailto:wilbertgescobar48@gmail.com" method="post" enctype="text/plain">
+            <div class="form-group">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej. Laura Mendoza" required>
+            </div>
+
+            <div class="form-group">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" id="correo" name="correo" class="form-control" placeholder="laura@empresa.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="tipo-proyecto">Tipo de proyecto</label>
+              <select id="tipo-proyecto" name="tipo_proyecto" class="form-control" required>
+                <option value="" disabled selected>Selecciona una opción...</option>
+                <option value="spa-react">Desarrollo Web / SPA con React</option>
+                <option value="diseno-ui">Diseño UI/UX & Maquetación</option>
+                <option value="ecommerce">E-Commerce / Landing Page</option>
+                <option value="migracion">Migración a React / Next.js</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="mensaje">Detalles del proyecto</label>
+              <textarea id="mensaje" name="mensaje" class="form-control" placeholder="Cuéntame brevemente tus objetivos, plazos estimados o funcionalidades clave..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Enviar Solicitud
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       VISORES MODALES INTERACTIVOS EN CSS PURO (:target) PARA CADA CERTIFICADO
+       ======================================================================== -->
+
+  <!-- Modal 1: Front-End Development with React (Página 2 del PDF) -->
+  <div id="cert-modal-1" class="cert-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-1">
+    <a href="#certificados" class="cert-modal-backdrop-close" aria-label="Cerrar visor"></a>
+    <div class="cert-modal-dialog">
+      <div class="cert-modal-topbar">
+        <span class="cert-modal-label">Certificado 1 de 4 • portafolio1.pdf</span>
+        <a href="#certificados" class="cert-modal-close-btn">✕ Cerrar</a>
+      </div>
+
+      <div class="diploma-sheet theme-react">
+        <img class="cert-preview-image" src="/portafolio1.png" alt="Vista previa del certificado portafolio1" />
+        <div class="diploma-header-emblem">
+          <div class="diploma-rosette rosette-blue">A</div>
+          <div class="diploma-institution">Academlo</div>
+          <div class="diploma-sub-institution">School of Technology and Computer Science</div>
+        </div>
+
+        <p class="diploma-endorses">Endorses</p>
+        <h3 id="modal-title-1" class="diploma-recipient">Wilbert Gordillo Escobar</h3>
+        <p class="diploma-course-intro">For successfully completing the</p>
+        <div class="diploma-course-title">Front-End Development with React module</div>
+
+        <div class="diploma-details-bar">
+          <span>Fecha: <strong>17.05.2023</strong></span>
+          <span>Código de verificación: <strong>41515159196136</strong></span>
+        </div>
+
+        <div class="diploma-signatures">
+          <div class="signature-box">
+            <span class="signature-script">Georg Berger</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Georg Berger</span>
+            <span class="signature-role">President</span>
+          </div>
+          <div class="signature-box">
+            <span class="signature-script">Erik Perez</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Erik Perez</span>
+            <span class="signature-role">Academic Director</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-modal-actions">
+        <div class="modal-nav-group">
+          <a href="#cert-modal-4" class="btn-modal-nav">← Anterior</a>
+          <a href="#cert-modal-2" class="btn-modal-nav">Siguiente →</a>
+        </div>
+        <a href="/portafolio1.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.84rem;">
+          Abrir PDF Original (Pág. 2)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Back-End Development with Node.js (Página 1 del PDF) -->
+  <div id="cert-modal-2" class="cert-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-2">
+    <a href="#certificados" class="cert-modal-backdrop-close" aria-label="Cerrar visor"></a>
+    <div class="cert-modal-dialog">
+      <div class="cert-modal-topbar">
+        <span class="cert-modal-label">Certificado 2 de 4 • portafolio2.pdf</span>
+        <a href="#certificados" class="cert-modal-close-btn">✕ Cerrar</a>
+      </div>
+
+      <div class="diploma-sheet theme-node">
+        <img class="cert-preview-image" src="/portafolio2.png" alt="Vista previa del certificado portafolio2" />
+        <div class="diploma-header-emblem">
+          <div class="diploma-rosette rosette-sand">A</div>
+          <div class="diploma-institution">Academlo</div>
+          <div class="diploma-sub-institution">School of Technology and Computer Science</div>
+        </div>
+
+        <p class="diploma-endorses">Endorses</p>
+        <h3 id="modal-title-2" class="diploma-recipient">Wilbert Gordillo Escobar</h3>
+        <p class="diploma-course-intro">For successfully completing the</p>
+        <div class="diploma-course-title">Back-End Development with Node.js module</div>
+
+        <div class="diploma-details-bar">
+          <span>Fecha: <strong>13.07.2023</strong></span>
+          <span>Código de verificación: <strong>48674169200672</strong></span>
+        </div>
+
+        <div class="diploma-signatures">
+          <div class="signature-box">
+            <span class="signature-script">Georg Berger</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Georg Berger</span>
+            <span class="signature-role">President</span>
+          </div>
+          <div class="signature-box">
+            <span class="signature-script">Erik Perez</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Erik Perez</span>
+            <span class="signature-role">Academic Director</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-modal-actions">
+        <div class="modal-nav-group">
+          <a href="#cert-modal-1" class="btn-modal-nav">← Anterior</a>
+          <a href="#cert-modal-3" class="btn-modal-nav">Siguiente →</a>
+        </div>
+        <a href="/portafolio2.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.84rem;">
+          Abrir PDF Original (Pág. 1)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Foundations in HTML, CSS, and Javascript (Página 3 del PDF) -->
+  <div id="cert-modal-3" class="cert-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-3">
+    <a href="#certificados" class="cert-modal-backdrop-close" aria-label="Cerrar visor"></a>
+    <div class="cert-modal-dialog">
+      <div class="cert-modal-topbar">
+        <span class="cert-modal-label">Certificado 3 de 4 • portafolio3.pdf</span>
+        <a href="#certificados" class="cert-modal-close-btn">✕ Cerrar</a>
+      </div>
+
+      <div class="diploma-sheet theme-foundations">
+        <img class="cert-preview-image" src="/portafolio3.png" alt="Vista previa del certificado portafolio3" />
+        <div class="diploma-header-emblem">
+          <div class="diploma-rosette rosette-slate">A</div>
+          <div class="diploma-institution">Academlo</div>
+          <div class="diploma-sub-institution">School of Technology and Computer Science</div>
+        </div>
+
+        <p class="diploma-endorses">Endorses</p>
+        <h3 id="modal-title-3" class="diploma-recipient">Wilbert Gordillo Escobar</h3>
+        <p class="diploma-course-intro">For successfully completing the</p>
+        <div class="diploma-course-title">Foundations in HTML, CSS, and Javascript module</div>
+
+        <div class="diploma-details-bar">
+          <span>Fecha: <strong>22.03.2023</strong></span>
+          <span>Código de verificación: <strong>89060542903022</strong></span>
+        </div>
+
+        <div class="diploma-signatures">
+          <div class="signature-box">
+            <span class="signature-script">Georg Berger</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Georg Berger</span>
+            <span class="signature-role">President</span>
+          </div>
+          <div class="signature-box">
+            <span class="signature-script">Erik Perez</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Erik Perez</span>
+            <span class="signature-role">Academic Director</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-modal-actions">
+        <div class="modal-nav-group">
+          <a href="#cert-modal-2" class="btn-modal-nav">← Anterior</a>
+          <a href="#cert-modal-4" class="btn-modal-nav">Siguiente →</a>
+        </div>
+        <a href="/portafolio3.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.84rem;">
+          Abrir PDF Original (Pág. 3)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: I Congreso Internacional en IA y Sistemas Complejos Cusco 2024 (Página 4 del PDF) -->
+  <div id="cert-modal-4" class="cert-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-4">
+    <a href="#certificados" class="cert-modal-backdrop-close" aria-label="Cerrar visor"></a>
+    <div class="cert-modal-dialog">
+      <div class="cert-modal-topbar">
+        <span class="cert-modal-label">Certificado 4 de 4 • portafolio4.pdf</span>
+        <a href="#certificados" class="cert-modal-close-btn">✕ Cerrar</a>
+      </div>
+
+      <div class="diploma-sheet theme-utea">
+        <img class="cert-preview-image" src="/portafolio4.png" alt="Vista previa del certificado portafolio4" />
+        <div class="diploma-header-emblem">
+          <div class="diploma-rosette rosette-utea">UTEA</div>
+          <div class="diploma-institution">Universidad Tecnológica de los Andes</div>
+          <div class="diploma-sub-institution">Facultad de Ingeniería • Escuela Profesional de Ingeniería de Sistemas e Informática Filial Cusco</div>
+        </div>
+
+        <p class="diploma-endorses">Certificado otorgado a</p>
+        <h3 id="modal-title-4" class="diploma-recipient">WILBERT GORDILLO ESCOBAR</h3>
+        <p class="diploma-course-intro">Por su participación en calidad de <strong>ASISTENTE</strong> en el</p>
+        <div class="diploma-course-title">I Congreso Internacional de Investigación en Inteligencia Artificial y Sistemas Complejos Cusco 2024</div>
+
+        <div class="diploma-details-bar">
+          <span>Fecha: <strong>16 de agosto de 2024</strong></span>
+          <span>Sede: <strong>Filial Cusco</strong></span>
+        </div>
+
+        <div class="diploma-signatures">
+          <div class="signature-box">
+            <span class="signature-script">Dr. Juan Alarcón</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Dr. Juan Alarcón Camacho</span>
+            <span class="signature-role">Decano de la Facultad de Ingeniería</span>
+          </div>
+          <div class="signature-box">
+            <span class="signature-script">Mg. Luis Zegarra</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Mg. Luis Enrique Zegarra Ramírez</span>
+            <span class="signature-role">Director EPISEI</span>
+          </div>
+          <div class="signature-box">
+            <span class="signature-script">Mgt. Javier Moreano</span>
+            <span class="signature-line"></span>
+            <span class="signature-name">Mgt. Javier Moreano Córdova</span>
+            <span class="signature-role">Subdirector EPISEI Filial Cusco</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-modal-actions">
+        <div class="modal-nav-group">
+          <a href="#cert-modal-3" class="btn-modal-nav">← Anterior</a>
+          <a href="#cert-modal-1" class="btn-modal-nav">Siguiente →</a>
+        </div>
+        <a href="/portafolio4.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.84rem;">
+          Abrir PDF Original (Pág. 4)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       FOOTER LIMPIO
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="#inicio" class="brand-logo" style="font-size: 1.1rem;">
+        <span>Wilbert<span class="gradient-text">.react</span></span>
+      </a>
+      <p class="footer-copy">
+        © 2026 Wilbert Gordillo Escobar — Diseñador Web & Desarrollador React. Todos los derechos reservados.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
